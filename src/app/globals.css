@@ -1,0 +1,197 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --news-paper: #f8f5f0;
+  --news-dark: #1a1a1a;
+  --news-gray: #4a4a4a;
+  --news-accent: #8b0000;
+  --news-border: #d4d0c8;
+}
+
+body {
+  background-color: var(--news-paper);
+  color: var(--news-dark);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Professional Editorial Typography */
+.article-content h1 {
+  font-family: Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.article-content h2 {
+  font-family: Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--news-dark);
+  border-left: 4px solid var(--news-accent);
+  padding-left: 1rem;
+}
+
+.article-content h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.article-content p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.article-content a {
+  color: var(--news-accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--news-accent);
+  transition: all 0.2s;
+}
+
+.article-content a:hover {
+  background-color: var(--news-accent);
+  color: white;
+}
+
+/* Institutional Infobox - No Floats (Fixes Overlapping) */
+.infobox {
+  background-color: #fff;
+  border: 2px solid var(--news-dark);
+  padding: 0;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  font-size: 0.9rem;
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.05);
+}
+
+.infobox-title {
+  background-color: var(--news-dark);
+  color: white;
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.infobox-row {
+  display: flex;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--news-border);
+}
+
+.infobox-label {
+  font-weight: 600;
+  width: 40%;
+  color: var(--news-gray);
+}
+
+.infobox-value {
+  width: 60%;
+}
+
+/* Table of contents */
+.toc {
+  background-color: white;
+  border: 1px dashed var(--news-dark);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.toc-title {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.toc li {
+  padding: 0.25rem 0;
+}
+
+.toc a {
+  color: var(--news-accent);
+  text-decoration: none;
+}
+
+/* Reference styling */
+.references {
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}
+
+.references ol {
+  padding-left: 1.5rem;
+}
+
+.references li {
+  margin-bottom: 0.5rem;
+}
+
+/* Card styling */
+.card {
+  background: white;
+  border: 1px solid var(--news-border);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styling */
+.header-border {
+  border-bottom: 3px solid var(--news-dark);
+}
+
+.category-tag {
+  background-color: var(--news-accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Professional Archive Image Protection */
+.no-drag {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.grid-container {
+  @apply max-w-full overflow-x-hidden min-w-0;
+}
+
+/* Professional Archive Image Protection and Styling */
+.no-drag {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.grid-container {
+  @apply max-w-full overflow-x-hidden min-w-0;
+}
