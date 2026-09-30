@@ -1,0 +1,163 @@
+"use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { getArticleBySlug, getRelatedArticles } from "@/lib/content";
+import ArticleImage from "@/components/ArticleImage";
+
+export default function ArticlePage() {
+  const params = useParams();
+  const slug = (params.slug as string) || "";
+  const article = getArticleBySlug(slug);
+  const relatedArticles = getRelatedArticles(slug, 3);
+
+  if (!article) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-4xl font-serif font-bold text-news-dark mb-4">Article Not Found</h1>
+        <p className="text-news-gray mb-6">The page you requested does not exist.</p>
+        <Link href="/" className="bg-news-accent text-white px-6 py-3 hover:bg-red-700 transition">
+          Return Home
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <article className="bg-white">
+      <div className="container mx-auto px-4 py-3 text-sm text-news-gray border-b border-news-border">
+        <Link href="/" className="hover:text-news-accent transition">Home</Link>
+        <span className="mx-2">/</span>
+        <Link href={`/category/${article.category.toLowerCase().replace(/\s*&\s*/g, "-").replace(/\s+/g, "-")}`} className="hover:text-news-accent transition">
+          {article.category}
+        </Link>
+        <span className="mx-2">/</span>
+        <span className="text-news-dark font-semibold">{article.title}</span>
+      </div>
+
+      <div className="border-b-2 border-news-dark bg-gradient-to-b from-white to-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl">
+            <span className="category-tag text-sm mb-3 inline-block">{article.category}</span>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-news-dark leading-tight">
+              {article.title}
+            </h1>
+            <p className="text-xl text-news-gray font-serif italic mt-4 mb-3">{article.excerpt}</p>
+            <div className="flex flex-wrap gap-4 text-sm text-news-gray">
+              {article.author && <span>By {article.author}</span>}
+              {article.date && <span>Published: {article.date}</span>}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {article.image && (
+        <div className="w-full overflow-hidden bg-gray-100">
+          <ArticleImage src={article.image} alt={article.title} className="w-full h-[320px] md:h-[420px] object-cover" />
+        </div>
+      )}
+
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="prose prose-lg max-w-none text-news-dark leading-8">
+              {article.content ? (
+                article.content.split("\n\n").map((paragraph, index) => {
+                  if (paragraph.startsWith("###")) {
+                    return (
+                      <h3 key={index} className="text-2xl font-serif font-bold mt-8 mb-4 text-news-dark">
+                        {paragraph.replace(/^###\s*/, "").trim()}
+                      </h3>
+                    );
+                  }
+
+                  if (paragraph.startsWith("##")) {
+                    return (
+                      <h2 key={index} className="text-3xl font-serif font-bold mt-10 mb-4 text-news-dark border-b-2 border-news-accent pb-2">
+                        {paragraph.replace(/^##\s*/, "").trim()}
+                      </h2>
+                    );
+                  }
+
+                  return <p key={index} className="mb-6 text-base md:text-lg">{paragraph.trim()}</p>;
+                })
+              ) : (
+                <p className="text-lg leading-8">{article.excerpt}</p>
+              )}
+            </div>
+
+            <div className="mt-12 pt-8 border-t border-news-border">
+              <h3 className="font-serif font-bold text-lg text-news-dark mb-4">Share this article</h3>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm font-semibold"
+                >
+                  X Tweet
+                </a>
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition text-sm font-semibold"
+                >
+                  Facebook
+                </a>
+                <button
+                  type="button"
+                  onClick={() => navigator.clipboard?.writeText(typeof window !== "undefined" ? window.location.href : "")}
+                  className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 transition text-sm font-semibold"
+                >
+                  Copy link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <aside className="lg:col-span-1">
+            <div className="bg-gray-50 border border-news-border p-6 rounded mb-6">
+              <h3 className="font-serif font-bold text-xl text-news-dark mb-4">Key Details</h3>
+              <dl className="space-y-3 text-sm text-news-gray">
+                <div>
+                  <dt className="font-semibold text-news-dark">Category</dt>
+                  <dd>{article.category}</dd>
+                </div>
+                {article.author && (
+                  <div>
+                    <dt className="font-semibold text-news-dark">Author</dt>
+                    <dd>{article.author}</dd>
+                  </div>
+                )}
+                {article.date && (
+                  <div>
+                    <dt className="font-semibold text-news-dark">Date</dt>
+                    <dd>{article.date}</dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+
+            {relatedArticles.length > 0 && (
+              <div className="bg-white border border-news-border p-6 rounded">
+                <h3 className="font-serif font-bold text-xl text-news-dark mb-4">Related Articles</h3>
+                <div className="space-y-4">
+                  {relatedArticles.map((related) => (
+                    <Link key={related.slug} href={`/article/${related.slug}`} className="block group">
+                      <h4 className="text-sm font-semibold text-news-dark group-hover:text-news-accent transition line-clamp-2">
+                        {related.title}
+                      </h4>
+                      <p className="text-xs text-news-gray mt-1 line-clamp-2">{related.excerpt}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </aside>
+        </div>
+      </div>
+    </article>
+  );
+}
+
